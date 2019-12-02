@@ -1,6 +1,8 @@
 package com.example.musicservice.ui.client.musicproviderlist
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -17,11 +19,15 @@ import kotlinx.android.synthetic.main.activity_client_music_providers_list.*
 class MusicProviderListActivity : AppCompatActivity(), MusicProviderListContract.MusicProviderListView {
 
     private val presenter : MusicProviderListPresenter = MusicApp.component.musicProviderListPresenter()
-
+    private val PREFS_FILENAME  : String =  "myprefs"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_music_providers_list)
         presenter.setView(this)
+
+        val prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
+        val editor = prefs!!.edit()
+
 
         mplist_usernametext.text = presenter.getUsername()
         backimage.setOnClickListener{
@@ -32,7 +38,17 @@ class MusicProviderListActivity : AppCompatActivity(), MusicProviderListContract
 
 
         val stringExtra = intent.getStringExtra("first_time")
-        if(stringExtra == "first") presenter.obtainAllMusicProviders(false,false,false,false)
+        if(stringExtra == "first") {
+            if(!prefs.contains("name_prev")) {
+                println("NOT CONTAINS SHARED PREV -------------------")
+                presenter.obtainAllMusicProviders(false,false,false,false)
+            }
+            else {
+                println("CONTAINS SHARED PREV -------------------")
+                presenter.obtainAllMusicProviders(prefs.getBoolean("name_prev", false),prefs.getBoolean("rating_prev", false)
+                    ,prefs.getBoolean("city_prev", false),prefs.getBoolean("active_prev", false))
+            }
+        }
         else presenter.obtainAllMusicProviders(
             intent.getBooleanExtra("name", false),
             intent.getBooleanExtra("rating", false),
@@ -50,6 +66,15 @@ class MusicProviderListActivity : AppCompatActivity(), MusicProviderListContract
             if(ratingcheckbox.isChecked) ratingCheckBox = true
             if(citycheckbox.isChecked) cityCheckBox = true
             if(activecheckbox.isChecked) activeCheckBox = true
+
+
+            editor.putBoolean("name_prev", nameCheckBox)
+            editor.putBoolean("rating_prev", ratingCheckBox)
+            editor.putBoolean("city_prev", cityCheckBox)
+            editor.putBoolean("active_prev", activeCheckBox)
+            //todo or commit
+            editor.apply()
+
             var intent : Intent = Intent(this, MusicProviderListActivity::class.java)
             intent.putExtra("first_time", firstTime)
             intent.putExtra("name", nameCheckBox)

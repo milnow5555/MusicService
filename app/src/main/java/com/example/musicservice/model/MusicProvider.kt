@@ -13,9 +13,9 @@ data class MusicProvider(var id : String? = "",
 
 
     enum class MusicPoviderType {
-        Orchestra,Jazz_Band, BigBand, Musician, Composer, Producer
+        Orchestra, Band, BigBand, Musician, Composer, Producer, DJ
     }
     enum class MusicProviderMusicalPreferences {
-        Jazz, Metal, ClassicalMusic, HardRock, HipHop, Regge
+        Jazz, Metal, Classical, HardRock, HipHop, Regge, Wedding, Party, Blues, Rock_and_roll, Country, Soul, Rap, Black_Metal, Death_Metal, Progressive_Rock
     }
 }
