@@ -5,5 +5,8 @@
     <string name="username_error">Username must consist of at least 3 characters</string>
     <string name="registration_failed">Registration Failed!"</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

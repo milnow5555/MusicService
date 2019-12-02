@@ -7,6 +7,9 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+    dataBinding{
+        enabled=true
+    }
     defaultConfig {
         applicationId "com.example.musicservice"
         minSdkVersion 23
@@ -21,16 +24,26 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+
+}
+kapt {
+    generateStubs = true
 }
 
-ext{
+ext {
     firebase = "19.2.0"
 }
 
 dependencies {
-    
+
+    // https://mvnrepository.com/artifact/androidx.databinding/databinding-runtime
+    implementation group: 'androidx.databinding', name: 'databinding-runtime', version: '3.5.2'
+
+    kapt "com.android.databinding:compiler:3.5.2"
     /*Dagger*/
     implementation 'com.google.dagger:dagger:2.11'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt 'com.google.dagger:dagger-compiler:2.11'
     compileOnly 'javax.annotation:jsr250-api:1.0'
     /*Firebase*/
